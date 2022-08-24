@@ -362,7 +362,7 @@ function find_player_pos()
 
 	gg.setRanges(gg.REGION_C_ALLOC)
 	gg.clearResults()
-	gg.searchNumber("1~1.5;0~1.5;-1.3~-0.5;1.0;1~1.5;0~1.5;-1.3~-0.5;1.0::29", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, ptoplayer.value + 0x400000, ptoplayer.value + 0x500000, 1)
+	gg.searchNumber("1~1.5;0~1.5;-0.9~-0.1;1.0;1~1.5;0~1.5;-0.9~-0.1;1.0::29", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, ptoplayer.value + 0x400000, ptoplayer.value + 0x500000, 1)
 	if gg.getResultsCount() > 0 then
 		player_pos_x = gg.getResults(1)[1]
 		offsets.pos_off = player_pos_x.address - player.address
