@@ -362,7 +362,7 @@ function find_player_pos()
 
 	gg.setRanges(gg.REGION_C_ALLOC)
 	gg.clearResults()
-	gg.searchNumber("1~1.5;0~1.5;-0.9~-0.1;1.0;1~1.5;0~1.5;-0.9~-0.1;1.0::29", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, ptoplayer.value + 0x400000, ptoplayer.value + 0x500000, 1)
+	gg.searchNumber("1.0~1.2;0~1.5;-1.3~-1.1;1.0;1.0~1.2;0~1.5;-1.3~-1.1;1.0::29", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, ptoplayer.value + 0x400000, ptoplayer.value + 0x500000, 1)
 	if gg.getResultsCount() > 0 then
 		player_pos_x = gg.getResults(1)[1]
 		offsets.pos_off = player_pos_x.address - player.address
@@ -657,14 +657,14 @@ end
 function loadoffsets()
 	config = gx.load_json_file(config_path)
 	if config == nil then
-		if gg.alert("Looks like offsets weren't found yet. Click \"OK\" to start scanning for offsets. You have to be at home spawn. If you are not at home, please go home, then don't move anywhere", "ok", "exit") ~= 1 then
+		if gg.alert("Looks like offsets weren't found yet. Click \"OK\" to start scanning for offsets. You should start scanning for offsets before logging in to your accont (don't click \"Play\" button)", "ok", "exit") ~= 1 then
 			os.exit()
 		end
 		gx.vars.settings = defaults
 		find_all_offsets()
 		config = gx.load_json_file(config_path)
 	elseif config.settings.version ~= gx.vars.settings.version then
-		if gg.alert("Looks like Sky were updated. Click \"OK\" to start scanning for offsets. You have to be at home spawn. If you are not at home, please go home, then don't move anywhere", "ok", "exit") ~= 1 then
+		if gg.alert("Looks like Sky were updated. Click \"OK\" to start scanning for offsets. You should start scanning for offsets before logging in to your accont (don't click \"Play\" button)", "ok", "exit") ~= 1 then
 			os.exit()
 		end
 		gx.vars.settings = config.settings
