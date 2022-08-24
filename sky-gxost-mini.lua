@@ -1141,9 +1141,9 @@ function DoPoints(points, cr_mode, use_candle)
 	end
 
 	local bckp_values = gg.getValues({
-		{address = coords.x, flags = gg.TYPE_FLOAT},
-		{address = coords.y, flags = gg.TYPE_FLOAT},
-		{address = coords.z, flags = gg.TYPE_FLOAT},
+		{address = player + offsets.pos_off, flags = gg.TYPE_FLOAT},
+		{address = player + offsets.pos_off + 0x4, flags = gg.TYPE_FLOAT},
+		{address = player + offsets.pos_off + 0x8, flags = gg.TYPE_FLOAT},
 	})
 
 	local i = 1
