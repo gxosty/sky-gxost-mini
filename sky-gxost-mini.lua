@@ -485,6 +485,7 @@ function find_all_offsets()
 	gg.toast("Scanning for game speed offset")
 	find_game_speed()
 	saveoffsets()
+	find_adds()
 
 	gg.alert("Found offsets:\nptoplayer = "..string.format("%x", offsets.ptoplayer).."\nplayer -> pos_x = "..string.format("%x", offsets.pos_off).."\nptoentity = "..string.format("%x", offsets.ptoentity).."\nptonentity = "..string.format("%x", offsets.ptonentity).."\nnentity -> curmap = -"..string.format("%x", -offsets.curmap_off).."\nnentity -> gamespeed_off = -"..string.format("%x", -offsets.gamespeed_off))
 end
@@ -531,7 +532,7 @@ function find_adds()
 		
 		if gg.getResultsCount() > 0 then
 			nentity = gg.getResults(1)[1].address
-			nentity_test = getadd(nentity, gg.TYPE_DWORD) == 1099746509
+			nentity_test = true
 		end
 	end
 
