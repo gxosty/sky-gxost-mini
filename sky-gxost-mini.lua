@@ -1159,9 +1159,9 @@ function DoPoints(points, cr_mode, use_candle)
 		end
 	
 		gg.setValues({
-			{address = player + offsets.pos_off, flags = gg.TYPE_FLOAT, value = points[i].x},
+			{address = player + offsets.pos_off + 0x8, flags = gg.TYPE_FLOAT, value = points[i].x},
 			{address = player + offsets.pos_off + 0x4, flags = gg.TYPE_FLOAT, value = points[i].y},
-			{address = player + offsets.pos_off + 0x8, flags = gg.TYPE_FLOAT, value = points[i].z}
+			{address = player + offsets.pos_off, flags = gg.TYPE_FLOAT, value = points[i].z}
 		})
 	
 		if not(points[i].e == true) and not(i == #points) then
