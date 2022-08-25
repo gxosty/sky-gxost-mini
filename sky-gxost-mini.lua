@@ -19,8 +19,8 @@ defaults = {
 }
 local old_ranges = gg.getRanges()
 local bootloader = gg.getRangesList('libBootloader.so')[1].start
-gx.set_signs({[true] = '¦✅¦', [false] = '¦❌¦'})
-gx.set_back_text("|<- Back")
+gx.set_signs({[true] = '〘✡', [false] = '❖〙'})
+gx.set_back_text("[⇦] Back")
 
 function pcheck()
 	if gameinfo.packageName ~= scriptv.process then
@@ -33,6 +33,8 @@ end
 -- y: 0~1.5
 -- z: -1.3~-1.1
 -- w: 1.0
+
+-- plants h 00 00 80 7F 00 00 00 00 00 00 80 3F 00 00 00 00 00 00 80 3F
 
 maps = {
 	{"Home", "CandleSpace"},
@@ -852,11 +854,40 @@ function find_nentity()
 	gg.setRanges(old_ranges)
 end
 
+function find_plants_offset()
+	gg.setRanges(gg.REGION_C_ALLOC)
+	gg.clearResults()
+	gg.searchNumber("h 00 00 80 7F 00 00 00 00 00 00 80 3F 00 00 00 00 00 00 80 3F", gg.TYPE_BYTE)
+	if gg.getResultsCount() == 0 then
+		offsets.plants = 0
+		gg.toast("Failed")
+		gg.setRanges(old_ranges)
+		return
+	end
+	gg.refineNumber(-128, gg.TYPE_BYTE)
+	if gg.getResultsCount() == 0 then
+		offsets.plants = 0
+		gg.toast("Failed")
+		gg.setRanges(old_ranges)
+		return
+	end
+	if type(nentity) ~= "table" then
+		gg.clearResults()
+		gg.searchNumber("1099746509", gg.TYPE_DWORD)
+		nentity = gg.getResults(1)[1]
+	end
+	plants = {address = gg.getResults(2)[2].address - 0x2, value = 1.0, flags = gg.TYPE_FLOAT, name = 'plants'}
+	offsets.plants = plants.address - nentity.address
+	gg.addListItems({plants})
+	gg.clearResults()
+	gg.setRanges(old_ranges)
+end
+
 function find_game_speed()
 	gg.setRanges(gg.REGION_C_ALLOC)
 	gg.clearResults()
 	gg.searchNumber("1.0", gg.TYPE_FLOAT)
-	gg.alert("Now, please hide Sky and then open GG again", "ok")
+	gg.alert("Now, please hide/minimize Sky and then open GG again", "ok")
 	gg.setVisible(false)
 	while true do
 		if gg.isVisible() then
@@ -873,7 +904,7 @@ function find_game_speed()
 		return
 	end
 	gamespeed = gg.getResults(1)[1]
-	if nentity == nil then
+	if type(nentity) ~= "table" then
 		gg.clearResults()
 		gg.searchNumber("1099746509", gg.TYPE_DWORD)
 		nentity = gg.getResults(1)[1]
@@ -897,7 +928,7 @@ function find_current_map()
 	end
 	gg.refineNumber(":C", gg.TYPE_BYTE)
 	local values = gg.getResults(gg.getResultCount())
-	if nentity == nil then
+	if type(nentity) ~= "table" then
 		gg.clearResults()
 		gg.searchNumber("1099746509", gg.TYPE_DWORD)
 		nentity = gg.getResults(1)[1]
@@ -915,6 +946,33 @@ function find_current_map()
 	gg.setRanges(old_ranges)
 end
 
+function check_offsets()
+	for k, v in pairs(offsets) do
+		if v == nil then offsets[k] = 0 end
+	end
+end
+
+function clear_offsets()
+	for k, v in pairs(offsets) do
+		offsets[k] = nil
+	end
+end
+
+function show_offsets()
+	check_offsets()
+	local output = ""
+	output = output.."Found offsets:\n"
+	output = output.."ptoplayer = "..string.format("%x", offsets.ptoplayer).."\n"
+	output = output.."player -> pos_x = "..string.format("%x", offsets.pos_off).."\n"
+	output = output.."ptoentity = "..string.format("%x", offsets.ptoentity).."\n"
+	output = output.."ptonentity = "..string.format("%x", offsets.ptonentity).."\n"
+	output = output.."nentity -> curmap = -"..string.format("%x", -offsets.curmap_off).."\n"
+	output = output.."nentity -> plants = "..string.format("%x", offsets.plants).."\n"
+	output = output.."nentity -> gamespeed_off = -"..string.format("%x", -offsets.gamespeed_off)
+
+	gg.alert(output, "ok")
+end
+
 function find_all_offsets()
 	offsets = {}
 	gg.toast("Scanning for player offset")
@@ -925,12 +983,14 @@ function find_all_offsets()
 	find_nentity()
 	gg.toast("Scanning for current map offset")
 	find_current_map()
+	gg.toast("Scanning for plants offset")
+	find_plants_offset()
 	gg.toast("Scanning for game speed offset")
 	find_game_speed()
 	saveoffsets()
 	find_adds()
 
-	gg.alert("Found offsets:\nptoplayer = "..string.format("%x", offsets.ptoplayer).."\nplayer -> pos_x = "..string.format("%x", offsets.pos_off).."\nptoentity = "..string.format("%x", offsets.ptoentity).."\nptonentity = "..string.format("%x", offsets.ptonentity).."\nnentity -> curmap = -"..string.format("%x", -offsets.curmap_off).."\nnentity -> gamespeed_off = -"..string.format("%x", -offsets.gamespeed_off))
+	show_offsets()
 end
 
 -- gg.getRangesList('[anon:libc_malloc]')
@@ -964,11 +1024,14 @@ function setadd(add,flag,val,bfreeze)
 end
 
 function find_adds()
+	gg.clearResults()
 	bootloader = gg.getRangesList('libBootloader.so')[1].start
 	player = getadd(bootloader + offsets.ptoplayer, gg.TYPE_QWORD)
 	player_r = player + offsets.pos_off + 0x20
 	nentity = getadd(bootloader + offsets.ptoentity, gg.TYPE_QWORD) + offsets.ptonentity
 	nentity_test = getadd(nentity, gg.TYPE_DWORD) == 1099746509
+	candles = find_candles()
+	plants = find_plants()
 
 	if not(nentity_test) then
 		gg.searchNumber(1099746509, gg.TYPE_DWORD)
@@ -983,6 +1046,41 @@ function find_adds()
 		gg.toast("Error, some functions may not work.")
 	else
 		curmap = nentity + offsets.curmap_off
+	end
+end
+
+function find_candles()
+	if nentity_test then
+		local c = {}
+
+		local n = nentity + 0x1D4
+		for i=1, 650 do
+			table.insert(c, {address = n + (i - 1) * 0x1C0, flags = gg.TYPE_FLOAT, value = 0, name = 'cndl', freeze = false})
+		end
+
+		return c
+	else
+		return {}
+	end
+end
+
+function find_plants()
+	if offsets.plants == 0 or offsets.plants == nil then
+		gg.toast("No plants offset was found. Need to rescan offsets")
+		return
+	end
+	if nentity_test then
+		local m = {}
+
+		for i=1, 511 do
+			m[i]= {address = nentity + offsets.plants + ((i - 1) * 8), flags = gg.TYPE_FLOAT}
+		end
+
+		local plants = gg.getValues(m)
+
+		return plants
+	else
+		return {}
 	end
 end
 
@@ -1015,6 +1113,47 @@ function pmove(dis)
 	local az = dis * math.cos(radin)
 
 	setposit(x + ax,y,z + az)
+end
+
+function set_autoburn(b)
+	if b then
+		autoburn = on
+
+		for i, v in ipairs(candles) do
+			v.value = 1.0
+			v.freeze = true
+		end
+		
+		gg.setValues(candles)
+		gg.addListItems(candles)
+
+		for i, v in ipairs(plants) do
+			v.value = 0.0
+			v.freeze = true
+		end
+
+		gg.setValues(plants)
+		gg.addListItems(plants)
+
+	else
+		autoburn = off
+
+		for i, v in ipairs(candles) do
+			v.value = 0.0
+			v.freeze = false
+		end
+		
+		gg.setValues(candles)
+		gg.removeListItems(candles)
+
+		for i, v in ipairs(plants) do
+			v.value = 1.0
+			v.freeze = false
+		end
+
+		gg.setValues(plants)
+		gg.removeListItems(plants)
+	end
 end
 
 function make_positions(map)
@@ -1291,6 +1430,21 @@ function loadoffsets()
 		gx.vars.settings = config.settings
 		find_all_offsets()
 		config = gx.load_json_file(config_path)
+	else
+		local exist = false1
+		for k, v in pairs(config.offsets) do
+			exist = true
+			break
+		end
+
+		if not(exist) then
+			if gg.alert("Looks like you cleared offsets (or the config file is corrupt). Click \"OK\" to start scanning for offsets. You should start scanning for offsets before logging in to your accont (don't click \"Play\" button)", "ok", "exit") ~= 1 then
+				os.exit()
+			end
+			gx.vars.settings = config.settings
+			find_all_offsets()
+			config = gx.load_json_file(config_path)
+		end
 	end
 
 	offsets = config.offsets
@@ -1309,16 +1463,18 @@ function init()
 	pcheck()
 	loadoffsets()
 	find_adds()
+	gg.toast("gxost-mini loaded")
 end
 
 gx.add_menu({
-	title = {"Offset Finder v", {tostring, {"{gx:settings.version}"}}},
+	title = {"gxost-mini v", {tostring, {"{gx:settings.version}"}}},
 	name = "main",
 	menu = {
 		{"[⬆️] Wall Breach: {gx:settings.wbdistance}", {pmove, {"{gx:settings.wbdistance}"}}},
 		{"[🕯️] Semi-AutoCR", {semiautocr}},
 		{"[🚩] Go to", {gotomenu}},
 		{"[🕘] Set Game Speed", {input_game_speed}},
+		{"{gxsign} Autoburn 🔥", {set_autoburn, {"{gxbool}"}}},
 		{"[⚙️] Settings", {gx.open_menu, {"settingsmenu"}}}
 	},
 	type = "choice"
@@ -1329,11 +1485,30 @@ gx.add_menu({
 	name = "settingsmenu",
 	menu = {
 		{"[⬆️] Wall Breach distance: {gx:settings.wbdistance}", {gx.prompt_set_var, {"settings.wbdistance", "Set distance:"}}},
-		{"[💾] Rescan offsets", {find_all_offsets}}
+		{"[🔥] Use Autoburn in AutoCR: {gx:settings.useautoburn}", {gx.set_var, {"settings.useautoburn", "!{gx:settings.useautoburn}"}}},
+		{"[🖵] Show Offsets", {show_offsets}},
+		{"[💾] Rescan offsets", {find_all_offsets}},
+		{"[📝] Scan offsets manually", {gx.open_menu, {"offsetscanmenu"}}},
+		{"[🗑️] Clear Offsets", {clear_offsets}},
 	},
 	post_f = {saveoffsets},
 	type = "xback",
 	menu_repeat = true
+})
+
+gx.add_menu({
+	title = "Manual Scan:",
+	name = "offsetscanmenu",
+	menu = {
+		{"Find player pointer & offset", {find_player_offset}},
+		{"Find player position offset", {find_player_pos}},
+		{"Find ptoentity & ptonentity", {find_nentity}},
+		{"Find current map offset", {find_current_map}},
+		{"Find plants offset", {find_plants_offset}},
+		{"Find game speed offset", {find_game_speed}}
+	},
+	post_f = {show_offsets},
+	type = "back"
 })
 
 init()
