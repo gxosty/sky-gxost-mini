@@ -1020,7 +1020,7 @@ function find_cometics_emotes()
 	end
 	gg.refineNumber("h E0", gg.TYPE_BYTE)
 	closet = gg.getResults(1)[1]
-	offsets.closet = closet.address - bootloader
+	offsets.ptocloset = closet.address - bootloader
 	closet.name = "closet"
 	gg.addListItems({closet})
 	gg.clearResults()
