@@ -1587,7 +1587,7 @@ gx.add_menu({
 		{"[🚩] Go to", {gotomenu}},
 		{"[🕘] Set Game Speed", {input_game_speed}},
 		{"{gxsign} Autoburn 🔥", {set_autoburn, {"{gxbool}"}}},
-		{"{gxsign} Unlock all Cosmetics and Emotes", {unlock_all, {"{gxbool}"}}}
+		{"{gxsign} Unlock all Cosmetics and Emotes", {unlock_all, {"{gxbool}"}}},
 		{"{gxsign} Read Chat", {switch_chat}},
 		{"[⚙️] Settings", {gx.open_menu, {"settingsmenu"}}}
 	},
