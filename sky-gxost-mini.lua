@@ -2,7 +2,7 @@ local response = gg.makeRequest("https://raw.githubusercontent.com/gxosty/gx-gg/
 gx = load(response.content)()
 -- local gx = require("gx.gx")
 gameinfo = gg.getTargetInfo()
-scriptv = {process ='com.tgc.sky.android'}
+script = {process = {live = 'com.tgc.sky.android', beta = "com.tgc.sky.android.test.gold"}}
 
 gx.vars.settings = {
 	version = tostring(gameinfo.versionCode)
@@ -19,11 +19,13 @@ defaults = {
 }
 local old_ranges = gg.getRanges()
 local bootloader = gg.getRangesList('libBootloader.so')[1].start
-gx.set_signs({[true] = '〘✡', [false] = '❖〙'})
+gx.set_signs({[true] = '🟩', [false] = '⬜'})
 gx.set_back_text("[⇦] Back")
 
 function pcheck()
-	if gameinfo.packageName ~= scriptv.process then
+	if gameinfo.packageName == script.process.live then
+	elseif gameinfo.packageName == script.process.beta then
+	else
 		gg.alert('[Error] You have selected wrong process!\nprocess: ' .. gameinfo.packageName)
 		os.exit()
 	end
@@ -33,6 +35,11 @@ end
 -- y: 0~1.5
 -- z: -1.3~-1.1
 -- w: 1.0
+
+-- ????????????			4,043,309,695 	<- Chats 				h 3B 00 00 14 (7F) 02 00 F1 E8
+-- CBZ W8, [PC, #0xC]	872,415,336 	<- Friendship Nodes 	h 08 E1 79 39 (68) 00 00 34 FC
+-- LDR W8, [X28,#0x28]	-1,186,976,888 	<- Emotes				h 7C 00 00 B4 (88) 2B 40 B9 48
+-- CSET W0, WZR, NE 	446,629,856 	<- Cosmetics 			h 1F 00 00 F1 (E0) 07 9F 1A FD 7B 41 A9
 
 -- plants h 00 00 80 7F 00 00 00 00 00 00 80 3F 00 00 00 00 00 00 80 3F
 
@@ -101,25 +108,23 @@ maps = {
 }
 
 crpoints = {
-	{family = "Isle", name = "Isle", map = "Dawn", x = 198.626495, y = 1.420622, z = 55.874889},
-	{family = "Isle", name = "Isle", map = "Dawn", x = 188.544372, y = 2.123453, z = 282.240264},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -20.885326, y = 116.251564, z = 411.383056},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -6.596107, y = 94.594978, z = 414.994781},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -9.382213, y = 59.176074, z = 411.512390},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -13.865320, y = 51.673225, z = 374.921020},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -13.865320, y = 57.673225, z = 374.921020, e = true}, --Empty
-	{family = "Isle", name = "Isle", map = "Dawn", x = -11.492250, y = 52.585277, z = 372.309295},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -248.728149, y = 87.331031, z = 142.319595},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -236.742660, y = 85.810356, z = 146.746749},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -249.120483, y = 85.576774, z = 151.838165},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -249.120483, y = 91.576774, z = 151.838165, e = true}, --Empty
-	{family = "Isle", name = "Isle", map = "Dawn", x = -250.639999, y = 86.007148, z = 152.727386},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -41.489749, y = 9.738038, z = 212.676239, e = true}, --Empty
-	{family = "Isle", name = "Isle", map = "Dawn", x = -41.489749, y = 3.738038, z = 212.676239},
-	{family = "Isle", name = "Isle", map = "Dawn", x = -40.841159, y = 4.015078, z = 221.758468},
+	{family = "Isle", name = "Isle", map = "Dawn", x = 199.0281219482422, y = 1.4949415922164917, z = 55.607757568359375},
+	{family = "Isle", name = "Isle", map = "Dawn", x = 188.8359375, y = 2.1274662017822266, z = 281.8878173828125},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -249.32679748535156, y = 87.454345703125, z = 142.54803466796875},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -237.0557403564453, y = 85.76863098144531, z = 146.7663116455078},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -236.04269409179688, y = 86.95657348632812, z = 152.31085205078125},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -244.92938232421875, y = 84.61653137207031, z = 156.7991943359375},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -250.42015075683594, y = 86.00946044921875, z = 152.6269073486328},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -40.649532318115234, y = 4.388500213623047, z = 213.8318634033203},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -41.29156494140625, y = 4.239292621612549, z = 221.49343872070312},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -11.082122802734375, y = 52.980106353759766, z = 371.33514404296875},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -14.093791961669922, y = 51.66219711303711, z = 375.8876647949219},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -9.736741065979004, y = 60.848907470703125, z = 410.74066162109375},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -6.5760111808776855, y = 94.94068145751953, z = 414.8026123046875},
+	{family = "Isle", name = "Isle", map = "Dawn", x = -20.721954345703125, y = 116.52444458007812, z = 411.71160888671875, e = true},
 
-	{family = "Isle", name = "Trials Cave", map = "DawnCave", x = -300.252471, y = 235.625747, z = -2.923966},
-	{family = "Isle", name = "Trials Cave", map = "DawnCave", x = -328.902587, y = 284.778350, z = -12.368432, e = true},
+	{family = "Isle", name = "Trials Cave", map = "DawnCave", x = -300.23052978515625, y = 235.61544799804688, z = -3.1008522510528564},
+	{family = "Isle", name = "Trials Cave", map = "DawnCave", x = -325.010009765625, y = 303.2691345214844, z = -13.350000381469727, e = true},
 
 	{family = "Isle", name = "Water Trial", map = "Dawn_TrialsWater", x = -99.710937, y = 65.197624, z = 36.879520},
 	{family = "Isle", name = "Water Trial", map = "Dawn_TrialsWater", x = -210.3384552001953, y = 65.64981079101562, z = -107.05089569091797},
@@ -157,30 +162,47 @@ crpoints = {
 	{family = "Prairie", name = "Prairie Cave", map = "Prairie_Cave", x = 203.23948669433594, y = 187.85186767578125, z = 313.656982421875},
 	{family = "Prairie", name = "Prairie Cave", map = "Prairie_Cave", x = 213.3845672607422, y = 193.28684997558594, z = 268.37469482421875},
 
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 232.10833740234375, y = 180.99510192871094, z = 88.81009674072266},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 253.37257385253906, y = 194.7720184326172, z = 99.65469360351562},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 271.91143798828125, y = 198.752197265625, z = 94.46063232421875},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 350.6470947265625, y = 187.63072204589844, z = 90.81703186035156},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 361.661376953125, y = 193.9128875732422, z = 66.8396987915039},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 363.2092590332031, y = 187.15640258789062, z = 65.79632568359375},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 368.4921569824219, y = 185.7384490966797, z = 56.43801498413086},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 357.10992431640625, y = 185.90087890625, z = 48.336578369140625},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 349.0998840332031, y = 184.31912231445312, z = 31.3418025970459},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 325.6683349609375, y = 188.30438232421875, z = -11.511509895324707},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 318.2730712890625, y = 192.30494689941406, z = -15.794111251831055},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 456.2850646972656, y = 250.56715393066406, z = 133.75665283203125},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 477.6221618652344, y = 254.37265014648438, z = 122.10852813720703},
-	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 317.0993347167969, y = 183.3404998779297, z = -41.32593536376953},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 232.0214080810547, y = 181.00465393066406, z = 88.76461029052734},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 253.2946319580078, y = 194.7389678955078, z = 99.6910629272461},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 271.82672119140625, y = 203.0044403076172, z = 97.30021667480469},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 274.6653747558594, y = 203.00927734375, z = 95.59391021728516},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 275.1145935058594, y = 200.77865600585938, z = 95.06674194335938},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 271.93585205078125, y = 198.75755310058594, z = 94.380615234375},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 350.6317138671875, y = 187.62559509277344, z = 90.79566955566406},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 361.6009521484375, y = 193.90757751464844, z = 66.78277587890625},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 362.8221435546875, y = 198.1484375, z = 68.22998046875},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 365.0539245605469, y = 198.746337890625, z = 66.2552719116211},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 363.3024597167969, y = 196.00723266601562, z = 64.41118621826172},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 362.3773193359375, y = 194.4857635498047, z = 66.81575775146484},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 363.2718811035156, y = 187.16172790527344, z = 65.94229125976562},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 368.2834777832031, y = 185.7389678955078, z = 56.55746841430664},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 357.0162658691406, y = 185.8424072265625, z = 48.44491195678711},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 349.24114990234375, y = 184.33226013183594, z = 31.19115447998047},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 325.0887145996094, y = 188.00051879882812, z = -11.489691734313965},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 318.56646728515625, y = 192.33877563476562, z = -15.543036460876465},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 320.47406005859375, y = 196.23507690429688, z = -17.258026123046875},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 317.0406494140625, y = 196.23060607910156, z = -18.192277908325195},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 316.500244140625, y = 193.84535217285156, z = -18.51616859436035},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 273.8976745605469, y = 183.2012176513672, z = 25.326534271240234},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 317.0408935546875, y = 183.3435821533203, z = -41.40444564819336},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 457.6338806152344, y = 253.81626892089844, z = 113.07112884521484},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 456.34912109375, y = 250.56185913085938, z = 133.7495574951172},
+	{family = "Prairie", name = "Prairie Village", map = "Prairie_Village", x = 477.7264709472656, y = 254.38027954101562, z = 122.01375579833984, e = true},
 
-	{family = "Prairie", name = "8 player puzzle", map  = "DayHubCave", x = 1.246108055114746, y = 18.909801483154297, z = -16.016557693481445},
-	{family = "Prairie", name = "8 player puzzle", map  = "DayHubCave", x = 1.1128392219543457, y = 20.225313186645508, z = -7.040935516357422},
-	{family = "Prairie", name = "8 player puzzle", map  = "DayHubCave", x = -45.12632751464844, y = 57.98668670654297, z = -26.872119903564453},
-	{family = "Prairie", name = "8 player puzzle", map  = "DayHubCave", x = 2.6242594718933105, y = 39.48603820800781, z = 6.752442359924316},
+	{family = "Prairie", name = "8 player puzzle", map = "DayHubCave", x = -2.825667142868042, y = 39.470245361328125, z = 6.52934455871582},
+	{family = "Prairie", name = "8 player puzzle", map = "DayHubCave", x = 2.698847770690918, y = 39.49882888793945, z = 6.942953109741211},
+	{family = "Prairie", name = "8 player puzzle", map = "DayHubCave", x = 6.080935478210449, y = 39.227970123291016, z = 2.244690179824829},
+	{family = "Prairie", name = "8 player puzzle", map = "DayHubCave", x = 5.837886810302734, y = 39.229705810546875, z = -2.3993277549743652},
+	{family = "Prairie", name = "8 player puzzle", map = "DayHubCave", x = 2.594923496246338, y = 39.22773742675781, z = -5.9242987632751465},
+	{family = "Prairie", name = "8 player puzzle", map = "DayHubCave", x = -2.3487942218780518, y = 39.22792053222656, z = -6.088262557983398},
+	{family = "Prairie", name = "8 player puzzle", map = "DayHubCave", x = -6.0785369873046875, y = 39.227813720703125, z = -2.5309667587280273},
+	{family = "Prairie", name = "8 player puzzle", map = "DayHubCave", x = -6.009952068328857, y = 39.227230072021484, z = 2.5176568031311035},
+	{family = "Prairie", name = "8 player puzzle", map = "DayHubCave", x = -45.04271697998047, y = 57.995277404785156, z = -26.84793472290039, e = true},
 
 	{family = "Prairie", name = "Prairie Temple", map = "DayEnd", x = 43.756683349609375, y = 83.43392944335938, z = -100.00375366210938},
-    {family = "Prairie", name = "Prairie Temple", map = "DayEnd", x = 40.04158020019531, y = 84.47063446044922, z = -106.45093536376953},
-    {family = "Prairie", name = "Prairie Temple", map = "DayEnd", x = 45.88062286376953, y = 87.30172729492188, z = -109.91032409667969},
-    {family = "Prairie", name = "Prairie Temple", map = "DayEnd", x = 42.534854888916016, y = 75.16962432861328, z = -127.96691131591797},
+	{family = "Prairie", name = "Prairie Temple", map = "DayEnd", x = 40.04158020019531, y = 84.47063446044922, z = -106.45093536376953},
+	{family = "Prairie", name = "Prairie Temple", map = "DayEnd", x = 45.88062286376953, y = 87.30172729492188, z = -109.91032409667969},
+	{family = "Prairie", name = "Prairie Temple", map = "DayEnd", x = 42.534854888916016, y = 75.16962432861328, z = -127.96691131591797},
 
 	{family = "Prairie", name = "Bird Nest", map = "Prairie_NestAndKeeper", x = 120.34546661376953, y = 180.1386260986328, z = -144.81192016601562},
 	{family = "Prairie", name = "Bird Nest", map = "Prairie_NestAndKeeper", x = 118.63809204101562, y = 196.70538330078125, z = -157.4332275390625},
@@ -230,7 +252,6 @@ crpoints = {
 	{family = "Forest", name = "Forest", map = "Rain", x = -132.453857421875, y = 99.41631317138672, z = 30.74054527282715},
 	{family = "Forest", name = "Forest", map = "Rain", x = -117.27128601074219, y = 98.44124603271484, z = 28.47067642211914},
 
-	{family = "Forest", name = "Forest's Brook", map = "RainForest", x = -108.82130432128906, y = 98.4917984008789, z = 30.08849334716797},
 	{family = "Forest", name = "Forest's Brook", map = "RainForest", x = -106.87351989746094, y = 100.36298370361328, z = 26.845001220703125},
 	{family = "Forest", name = "Forest's Brook", map = "RainForest", x = -66.9166259765625, y = 106.41206359863281, z = 15.987776756286621},
 	{family = "Forest", name = "Forest's Brook", map = "RainForest", x = -71.43730926513672, y = 106.19283294677734, z = 29.42997932434082},
@@ -373,10 +394,10 @@ crpoints = {
 	{family = "Valley", name = "Hermit Valley", map = "Sunset_YetiPark", x = 683.3143920898438, y = 260.7340087890625, z = -191.4088134765625},
 
 	{family = "Valley", name = "Valley Temple", map = "SunsetEnd2", x = -189.81155395507812, y = 141.4324493408203, z = 9.400322914123535},
-    {family = "Valley", name = "Valley Temple", map = "SunsetEnd2", x = -150.7283172607422, y = 147.15293884277344, z = -29.96817398071289},
-    {family = "Valley", name = "Valley Temple", map = "SunsetEnd2", x = -149.0789337158203, y = 140.55630493164062, z = -30.956897735595703},
-    {family = "Valley", name = "Valley Temple", map = "SunsetEnd2", x = -127.04251861572266, y = 153.80331420898438, z = -18.655099868774414},
-    {family = "Valley", name = "Valley Temple", map = "SunsetEnd2", x = -118.18791198730469, y = 153.8365020751953, z = -11.451508522033691},
+	{family = "Valley", name = "Valley Temple", map = "SunsetEnd2", x = -150.7283172607422, y = 147.15293884277344, z = -29.96817398071289},
+	{family = "Valley", name = "Valley Temple", map = "SunsetEnd2", x = -149.0789337158203, y = 140.55630493164062, z = -30.956897735595703},
+	{family = "Valley", name = "Valley Temple", map = "SunsetEnd2", x = -127.04251861572266, y = 153.80331420898438, z = -18.655099868774414},
+	{family = "Valley", name = "Valley Temple", map = "SunsetEnd2", x = -118.18791198730469, y = 153.8365020751953, z = -11.451508522033691},
 
 	{family = "Wasteland", name = "Golden Wasteland", map = "Dusk", x = 325.54266357421875, y = 0.7171803712844849, z = 85.6548843383789},
 	{family = "Wasteland", name = "Golden Wasteland", map = "Dusk", x = 305.46075439453125, y = 1.1371877193450928, z = 83.43257904052734},
@@ -722,7 +743,6 @@ posits = {
 	{map='NightDesert',name='Throne',x=399.643310546875,y=92.43084716796875,z=778.90869140625},
 	{map='NightDesert',name='BigBooks',x=408.36773681640625,y=154.7767791748047,z=1037.8370361328125},
 	{map='NightDesert',name='Floating Eggrock',x=144.13259887695312,y=45.12910461425781,z=770.6494750976562},
-	{map='CandleSpace',name='black_room_island',x=-401.7143859863281,y=14.144501686096191,z=413.95562744140625},
 	{map='NightDesertBeach',name='jelly',x=-5397,73779296875,y=2580,5859375,z=6082,1962890625},
 	{map='NightDesert',name='To Infinite Desert',x=-21.14558982849121,y=9.46289348602295,z=547.5945434570312},
 	{map='Night_InfiniteDesert',name='Back to desert',x=635.3980712890625,y=54.36724853515625,z=-85.38371276855469},
@@ -946,6 +966,67 @@ function find_current_map()
 	gg.setRanges(old_ranges)
 end
 
+function find_chat_offset()
+	gg.setRanges(gg.REGION_CODE_APP)
+	gg.clearResults()
+	gg.searchNumber("h 3B 00 00 14 7F 02 00 F1 E8", gg.TYPE_BYTE)
+	if gg.getResultsCount() == 0 then
+		gg.toast("Failed")
+		offsets.chat = 0
+		offsets.chat_dist = 0
+		return
+	end
+	gg.refineNumber("h 7F", gg.TYPE_BYTE)
+	chat = gg.getResults(1)[1]
+	offsets.chat = chat.address - bootloader
+	chat.name = "chat"
+	gg.clearResults()
+	-- h 56 F4 1F 37 7F 02 14 6B 40 00 00 54 F6 F3 0F 36
+	gg.searchNumber("h 56 F4 1F 37 7F 02 14 6B 40 00 00 54 F6 F3 0F 36", gg.TYPE_BYTE)
+	if gg.getResultsCount() == 0 then
+		gg.toast("Failed")
+		offsets.chat = 0
+		offsets.chat_dist = 0
+		return
+	end
+	chat_dist = gg.getResults(1)[1]
+	offsets.chat_dist = chat_dist.address - chat.address
+	chat_dist.name = "chat_dist"
+	gg.addListItems({chat, chat_dist})
+	gg.clearResults()
+	gg.setRanges(old_ranges)
+end
+
+function find_cometics_emotes()
+	gg.setRanges(gg.REGION_CODE_APP)
+	gg.clearResults()
+	gg.searchNumber("h 7C 00 00 B4 88 2B 40 B9 48", gg.TYPE_BYTE)
+	if gg.getResultsCount() == 0 then
+		gg.toast("Failed")
+		offsets.ptoemotes = 0
+		return
+	end
+	gg.refineNumber("h 88", gg.TYPE_BYTE)
+	ptoemotes = gg.getResults(1)[1]
+	offsets.ptoemotes = ptoemotes.address - bootloader
+	ptoemotes.name = "ptoemotes"
+	gg.addListItems({ptoemotes})
+	gg.clearResults()
+	gg.searchNumber("h 1F 00 00 F1 E0 07 9F 1A FD 7B 41 A9", gg.TYPE_BYTE)
+	if gg.getResultsCount() == 0 then
+		gg.toast("Failed")
+		offsets.ptocloset = 0
+		return
+	end
+	gg.refineNumber("h E0", gg.TYPE_BYTE)
+	closet = gg.getResults(1)[1]
+	offsets.closet = closer.address - bootloader
+	closet.name = "closet"
+	gg.addListItems({closet})
+	gg.clearResults()
+	gg.setRanges(old_ranges)
+end
+
 function check_offsets()
 	for k, v in pairs(offsets) do
 		if v == nil then offsets[k] = 0 end
@@ -968,7 +1049,11 @@ function show_offsets()
 	output = output.."ptonentity = "..string.format("%x", offsets.ptonentity).."\n"
 	output = output.."nentity -> curmap = -"..string.format("%x", -offsets.curmap_off).."\n"
 	output = output.."nentity -> plants = "..string.format("%x", offsets.plants).."\n"
-	output = output.."nentity -> gamespeed_off = -"..string.format("%x", -offsets.gamespeed_off)
+	output = output.."nentity -> gamespeed_off = -"..string.format("%x", -offsets.gamespeed_off).."\n"
+	output = output.."chat = "..string.format("%x", offsets.chat).."\n"
+	output = output.."chat -> chat_dist = -"..string.format("%x", -offsets.chat_dist).."\n"
+	output = output.."ptoemotes = "..string.format("%x", offsets.ptoemotes).."\n"
+	output = output.."ptocloset = "..string.format("%x", offsets.ptocloset)
 
 	gg.alert(output, "ok")
 end
@@ -984,6 +1069,10 @@ function find_all_offsets()
 	gg.toast("Scanning for current map offset")
 	find_current_map()
 	gg.toast("Scanning for plants offset")
+	find_chat_offset()
+	gg.toast("Scanning for emotes and closet offset")
+	find_cometics_emotes()
+	gg.toast("Scanning for chat offset")
 	find_plants_offset()
 	gg.toast("Scanning for game speed offset")
 	find_game_speed()
@@ -1113,6 +1202,29 @@ function pmove(dis)
 	local az = dis * math.cos(radin)
 
 	setposit(x + ax,y,z + az)
+end
+
+function switch_chat(bool)
+	local data = ""
+	data = tostring(bootloader + offsets.chat).."a 4043309695D | 704644064D;"
+	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist).."a 924841046D | 1384120553D;"
+	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist + 0x4).."a 1796473471D | 4181778410D;"
+	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist + 0x8).."a 1409286208D | 957113193D;"
+	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist + 0xC).."a 907015158D | 958390601D"
+
+	gx.editor.switch(data, bool)
+end
+
+function unlock_all(b)
+	if b then
+		cosmetics = on
+		setadd(bootloader + offsets.ptoemotes, gg.TYPE_DWORD, 1384120352, false)
+		setadd(bootloader + offsets.ptocloset, gg.TYPE_DWORD, 1384120352, false)
+	else
+		cosmetics = off
+		setadd(bootloader + offsets.ptoemotes, gg.TYPE_DWORD, -1186976888, false)
+		setadd(bootloader + offsets.ptocloset, gg.TYPE_DWORD, 446629856, false)
+	end
 end
 
 function set_autoburn(b)
@@ -1475,6 +1587,8 @@ gx.add_menu({
 		{"[🚩] Go to", {gotomenu}},
 		{"[🕘] Set Game Speed", {input_game_speed}},
 		{"{gxsign} Autoburn 🔥", {set_autoburn, {"{gxbool}"}}},
+		{"{gxsign} Unlock all Cosmetics and Emotes", {unlock_all, {"{gxbool}"}}}
+		{"{gxsign} Read Chat", {switch_chat}},
 		{"[⚙️] Settings", {gx.open_menu, {"settingsmenu"}}}
 	},
 	type = "choice"
@@ -1486,7 +1600,7 @@ gx.add_menu({
 	menu = {
 		{"[⬆️] Wall Breach distance: {gx:settings.wbdistance}", {gx.prompt_set_var, {"settings.wbdistance", "Set distance:"}}},
 		{"[🔥] Use Autoburn in AutoCR: {gx:settings.useautoburn}", {gx.set_var, {"settings.useautoburn", "!{gx:settings.useautoburn}"}}},
-		{"[🖵] Show Offsets", {show_offsets}},
+		{"[📜] Show Offsets", {show_offsets}},
 		{"[💾] Rescan offsets", {find_all_offsets}},
 		{"[📝] Scan offsets manually", {gx.open_menu, {"offsetscanmenu"}}},
 		{"[🗑️] Clear Offsets", {clear_offsets}},
@@ -1505,7 +1619,9 @@ gx.add_menu({
 		{"Find ptoentity & ptonentity", {find_nentity}},
 		{"Find current map offset", {find_current_map}},
 		{"Find plants offset", {find_plants_offset}},
-		{"Find game speed offset", {find_game_speed}}
+		{"Find game speed offset", {find_game_speed}},
+		{"Find chat offset", {find_chat_offset}},
+		{"Find ptoemotes and ptocloset offsets", {find_cometics_emotes}}
 	},
 	post_f = {show_offsets},
 	type = "back"
