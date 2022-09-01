@@ -1003,6 +1003,7 @@ function find_cometics_emotes()
 	gg.searchNumber("h 7C 00 00 B4 88 2B 40 B9 48", gg.TYPE_BYTE)
 	if gg.getResultsCount() == 0 then
 		gg.toast("Failed")
+		offsets.ptocloset = 0
 		offsets.ptoemotes = 0
 		return
 	end
@@ -1015,6 +1016,7 @@ function find_cometics_emotes()
 	gg.searchNumber("h 1F 00 00 F1 E0 07 9F 1A FD 7B 41 A9", gg.TYPE_BYTE)
 	if gg.getResultsCount() == 0 then
 		gg.toast("Failed")
+		offsets.ptoemotes = 0
 		offsets.ptocloset = 0
 		return
 	end
@@ -1068,11 +1070,11 @@ function find_all_offsets()
 	find_nentity()
 	gg.toast("Scanning for current map offset")
 	find_current_map()
-	gg.toast("Scanning for plants offset")
+	gg.toast("Scanning for chat offset")
 	find_chat_offset()
 	gg.toast("Scanning for emotes and closet offset")
 	find_cometics_emotes()
-	gg.toast("Scanning for chat offset")
+	gg.toast("Scanning for plants offset")
 	find_plants_offset()
 	gg.toast("Scanning for game speed offset")
 	find_game_speed()
