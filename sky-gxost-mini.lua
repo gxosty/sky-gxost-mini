@@ -1209,10 +1209,10 @@ end
 function switch_chat(bool)
 	local data = ""
 	data = tostring(bootloader + offsets.chat).."a 4043309695D | 704644064D;"
-	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist).."a 924841046D | 1384120553D;"
-	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist + 0x4).."a 1796473471D | 4181778410D;"
-	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist + 0x8).."a 1409286208D | 957113193D;"
-	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist + 0xC).."a 907015158D | 958390601D"
+	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist).."a 924841046D | 1384120553D;"
+	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist + 0x4).."a 1796473471D | 4181778410D;"
+	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist + 0x8).."a 1409286208D | 957113193D;"
+	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist + 0xC).."a 907015158D | 958390601D"
 
 	gx.editor.switch(data, bool)
 end
@@ -1538,7 +1538,7 @@ function loadoffsets()
 		find_all_offsets()
 		config = gx.load_json_file(config_path)
 	elseif config.settings.version ~= gx.vars.settings.version then
-		if gg.alert("Looks like Sky were updated. Click \"OK\" to start scanning for offsets. You should start scanning for offsets before logging in to your accont (don't click \"Play\" button)", "ok", "exit") ~= 1 then
+		if gg.alert("Looks like Sky was updated. Click \"OK\" to start scanning for offsets. You should start scanning for offsets before logging in to your accont (don't click \"Play\" button)", "ok", "exit") ~= 1 then
 			os.exit()
 		end
 		gx.vars.settings = config.settings
@@ -1566,6 +1566,7 @@ function loadoffsets()
 end
 
 function saveoffsets()
+	gx.vars.settings.version = tostring(gameinfo.versionCode)
 	config = {
 		offsets = offsets,
 		settings = gx.vars.settings
