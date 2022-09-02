@@ -1209,10 +1209,10 @@ end
 function switch_chat(bool)
 	local data = ""
 	data = tostring(bootloader + offsets.chat).."a 4043309695D | 704644064D;"
-	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist).."a 924841046D | 1384120553D;"
-	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist + 0x4).."a 1796473471D | 4181778410D;"
-	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist + 0x8).."a 1409286208D | 957113193D;"
-	data = data..tostring(bootloader + offsets.chat - offsets.chat_dist + 0xC).."a 907015158D | 958390601D"
+	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist).."a 924841046D | 1384120553D;"
+	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist + 0x4).."a 1796473471D | 4181778410D;"
+	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist + 0x8).."a 1409286208D | 957113193D;"
+	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist + 0xC).."a 907015158D | 958390601D"
 
 	gx.editor.switch(data, bool)
 end
