@@ -1,4 +1,5 @@
 local response = gg.makeRequest("https://raw.githubusercontent.com/gxosty/gx-gg/main/gx.lua")
+-- local response = gg.makeRequest("http://192.168.1.108:9999/gx/gx.lua")
 gx = load(response.content)()
 -- local gx = require("gx.gx")
 gameinfo = gg.getTargetInfo()
@@ -36,7 +37,7 @@ end
 -- z: -1.3~-1.1
 -- w: 1.0
 
--- ????????????			4,043,309,695 	<- Chats 				h 3B 00 00 14 (7F) 02 00 F1 E8
+-- ????????????			4,043,309,695 	<- Chats 				h [3B]? 00 00 14 (7F) 02 00 F1 E8
 -- CBZ W8, [PC, #0xC]	872,415,336 	<- Friendship Nodes 	h 08 E1 79 39 (68) 00 00 34 FC
 -- LDR W8, [X28,#0x28]	-1,186,976,888 	<- Emotes				h 7C 00 00 B4 (88) 2B 40 B9 48
 -- CSET W0, WZR, NE 	446,629,856 	<- Cosmetics 			h 1F 00 00 F1 (E0) 07 9F 1A FD 7B 41 A9
@@ -44,67 +45,73 @@ end
 -- plants h 00 00 80 7F 00 00 00 00 00 00 80 3F 00 00 00 00 00 00 80 3F
 
 maps = {
-	{"Home", "CandleSpace"},
-	{"Isle", "Dawn"},
-	{"Trials Cave", "DawnCave"},
-	{"Water Trial", "Dawn_TrialsWater"},
-	{"Earth Trial", "Dawn_TrialsEarth"},
-	{"Air Trial", "Dawn_TrialsAir"},
-	{"Fire Trial", "Dawn_TrialsFire"},
-	{"Prairie Butterfly Field", "Prairie_ButterflyFields"},
-	{"Bird Nest", "Prairie_NestAndKeeper"},
-	{"Sancuary Islands", "Prairie_Island"},
-	{"Prairie Cave", "Prairie_Cave"},
-	{"Prairie Village", "Prairie_Village"},
-	{"8 player puzzle", "DayHubCave"},
-	{"Prairie Temple", "DayEnd"},
-	{"Forest", "Rain"},
-	{"Forest Clearing", "RainForest"},
-	{"Forest Elevated Clearing", "RainShelter"},
-	{"Forest Caves", "Rain_Cave"},
-	{"Forest Boneyard", "RainMid"},
-	{"Forest Temple", "RainEnd"},
-	{"Treehouse", "Rain_BaseCamp"},
-	{"Wind Paths", "Skyway"},
-	{"Valley", "Sunset"},
-	{"Valley Citadel", "Sunset_Citadel"},
-	{"Valley Fly Race", "Sunset_FlyRace"},
-	{"Valley Race", "SunsetRace"},
-	{"Valley Race End", "SunsetEnd"},
-	{"Hermit Valley", "Sunset_YetiPark"},
-	{"Dream Village", "SunsetVillage"},
-	{"Valley Dream Theater", "Sunset_Theater"},
-	{"Valley Music Shop", "SunsetVillage_MusicShop"},
-	{"Valley Colosseum", "SunsetColosseum"},
-	{"Valley Temple", "SunsetEnd2"},
-	{"Wasteland Lobby", "DuskStart"},
-	{"Wasteland", "Dusk"},
-	{"Abyss Area", "Dusk_Triangle"},
-	{"Wasteland Graveyard", "DuskGraveyard"},
-	{"Forgotten Ark", "DuskOasis"},
-	{"Crab Fields", "Dusk_CrabField"},
-	{"Battlefield", "DuskMid"},
-	{"Wasteland Temple", "DuskEnd"},
-	{"Vault", "Night"},
-	{"Vault 2", "Night2"},
-	{"Vault End", "NightEnd"},
-	{"Vault Archive", "NightArchive"},
-	{"Starlight Desert", "NightDesert"},
-	{"Starlight Desert Beach", "NightDesert_Beach"},
-	{"Jar Cave", "Night_JarCave"},
-	{"Infinite Desert", "Night_InfiniteDesert"},
-	{"Planets", "NightDesert_Planets"},
-	{"Office", "TGCOffice"},
-	{"Void of Shattering", "StormEvent_VoidSpace"},
-	{"Days of Mischief", "Event_DaysOfMischief"},
-	{"Nintendo area", "Nintendo_CandleSpace"},
-	{"Eden", "StormStart"},
-	{"Eden mid", "Storm"},
-	{"Eden end", "StormEnd"},
-	{"!!! Orbit !!!", "OrbitMid"},
-	{"!!! Orbit 2 !!!", "OrbitEnd"},
-	{"!!! Heaven !!!", "CandleSpaceEnd"},
-	{"Credits map", "Credits"},
+	{"Home", "CandleSpace", 0},
+	{"Isle", "Dawn", 5},
+	{"Trials Cave", "DawnCave", 0},
+	{"Water Trial", "Dawn_TrialsWater", 1},
+	{"Earth Trial", "Dawn_TrialsEarth", 1},
+	{"Air Trial", "Dawn_TrialsAir", 1},
+	{"Fire Trial", "Dawn_TrialsFire", 1},
+	{"Prairie Butterfly Field", "Prairie_ButterflyFields", 3},
+	{"Bird Nest", "Prairie_NestAndKeeper", 2},
+	{"Sancuary Islands", "Prairie_Island", 8},
+	{"Prairie Cave", "Prairie_Cave", 2},
+	{"Prairie Village", "Prairie_Village", 5},
+	{"8 player puzzle", "DayHubCave", 1},
+	{"Prairie Temple", "DayEnd", 0},
+	{"Forest", "Rain", 2},
+	{"Forest's Brook", "RainForest", 4},
+	{"Forest Elevated Clearing", "RainShelter", 2},
+	{"Forest Caves", "Rain_Cave", 4},
+	{"Forest Boneyard", "RainMid", 3},
+	{"Forest Temple", "RainEnd", 1},
+	{"Treehouse", "Rain_BaseCamp", 2},
+	{"Wind Paths", "Skyway", 1},
+	{"Valley", "Sunset", 3},
+	{"Valley Citadel", "Sunset_Citadel", 2},
+	{"Valley Fly Race", "Sunset_FlyRace", 2},
+	{"Valley Race", "SunsetRace", 1},
+	{"Valley Race End", "SunsetEnd", 1},
+	{"Hermit Valley", "Sunset_YetiPark", 2},
+	{"Dream Village", "SunsetVillage", 3},
+	{"Valley Dream Theater", "Sunset_Theater", 1},
+	{"Valley Music Shop", "SunsetVillage_MusicShop", 0},
+	{"Valley Colosseum", "SunsetColosseum", 1},
+	{"Valley Temple", "SunsetEnd2", 1},
+	{"Wasteland Lobby", "DuskStart", 0},
+	{"Wasteland", "Dusk", 2},
+	{"Abyss Area", "Dusk_Triangle", 2},
+	{"Wasteland Graveyard", "DuskGraveyard", 6},
+	{"Forgotten Ark", "DuskOasis", 2},
+	{"Crab Fields", "Dusk_CrabField", 3},
+	{"Battlefield", "DuskMid", 2},
+	{"Wasteland Temple", "DuskEnd", 1},
+	{"Vault", "Night", 2},
+	{"Vault 2", "Night2", 4},
+	{"Vault End", "NightEnd", 0},
+	{"Vault Archive", "NightArchive", 2},
+	{"Starlight Desert", "NightDesert", 3},
+	{"Starlight Desert Beach", "NightDesert_Beach", 0},
+	{"Jar Cave", "Night_JarCave", 0},
+	{"Infinite Desert", "Night_InfiniteDesert", 0},
+	{"Planets", "NightDesert_Planets", 0},
+	{"Office", "TGCOffice", 0},
+	{"Void of Shattering", "StormEvent_VoidSpace", 0},
+	{"Days of Mischief", "Event_DaysOfMischief", 0},
+	{"Nintendo area", "Nintendo_CandleSpace", 0},
+	{"Eden", "StormStart", 1},
+	{"Eden mid", "Storm", 9},
+	{"Eden end", "StormEnd", 0},
+	{"!!! Orbit !!!", "OrbitMid", 0},
+	{"!!! Orbit 2 !!!", "OrbitEnd", 0},
+	{"!!! Heaven !!!", "CandleSpaceEnd", 0},
+	{"Credits map", "Credits", 0},
+	{"Eyes of Child", "AP16EyesOfChild", 0},
+	{"Runaway", "AP16Runaway", 0},
+	{"Soft Inside", "AP16SoftInside", 0},
+	{"The Seed", "AP16TheSeed", 0},
+	{"Void Space", "AP16VoidSpace", 0},
+	{"Warrior", "AP16Warrior", 0}
 }
 
 crpoints = {
@@ -966,65 +973,41 @@ function find_current_map()
 	gg.setRanges(old_ranges)
 end
 
-function find_chat_offset()
-	gg.setRanges(gg.REGION_CODE_APP)
+function find_portal_offset()
+	gg.setRanges(gg.REGION_C_ALLOC)
 	gg.clearResults()
-	gg.searchNumber("h 3B 00 00 14 7F 02 00 F1 E8", gg.TYPE_BYTE)
-	if gg.getResultsCount() == 0 then
+	gg.searchNumber(":Ap08Intro", gg.TYPE_BYTE)
+	local len = gg.getResultsCount()
+	if len == 0 then
+		offsets.portal2_off = 0
 		gg.toast("Failed")
-		offsets.chat = 0
-		offsets.chat_dist = 0
 		return
 	end
-	gg.refineNumber("h 7F", gg.TYPE_BYTE)
-	chat = gg.getResults(1)[1]
-	offsets.chat = chat.address - bootloader
-	chat.name = "chat"
+	gg.refineNumber(":A", gg.TYPE_BYTE)
+	local values = gg.getResults(gg.getResultCount())
+	if type(nentity) ~= "table" then
+		gg.clearResults()
+		gg.searchNumber("1099746509", gg.TYPE_DWORD)
+		nentity = gg.getResults(1)[1]
+	end
+	for i = #values, 1, -1 do
+		if values[i].address > nentity.address then
+			table.remove(values, i)
+		end
+	end
+	portal = return_min(nentity.address, values, true)
 	gg.clearResults()
-	-- h 56 F4 1F 37 7F 02 14 6B 40 00 00 54 F6 F3 0F 36
-	gg.searchNumber("h 56 F4 1F 37 7F 02 14 6B 40 00 00 54 F6 F3 0F 36", gg.TYPE_BYTE)
-	if gg.getResultsCount() == 0 then
+	gg.searchNumber(16777216, gg.TYPE_DWORD, false, gg.SIGN_EQUAL, portal.address, portal.address + 0x70)
+	local len = gg.getResultsCount()
+	if len == 0 then
+		offsets.portal2_off = 0
 		gg.toast("Failed")
-		offsets.chat = 0
-		offsets.chat_dist = 0
 		return
 	end
-	chat_dist = gg.getResults(1)[1]
-	offsets.chat_dist = chat_dist.address - chat.address
-	chat_dist.name = "chat_dist"
-	gg.addListItems({chat, chat_dist})
-	gg.clearResults()
-	gg.setRanges(old_ranges)
-end
-
-function find_cometics_emotes()
-	gg.setRanges(gg.REGION_CODE_APP)
-	gg.clearResults()
-	gg.searchNumber("h 7C 00 00 B4 88 2B 40 B9 48", gg.TYPE_BYTE)
-	if gg.getResultsCount() == 0 then
-		gg.toast("Failed")
-		offsets.ptocloset = 0
-		offsets.ptoemotes = 0
-		return
-	end
-	gg.refineNumber("h 88", gg.TYPE_BYTE)
-	ptoemotes = gg.getResults(1)[1]
-	offsets.ptoemotes = ptoemotes.address - bootloader
-	ptoemotes.name = "ptoemotes"
-	gg.addListItems({ptoemotes})
-	gg.clearResults()
-	gg.searchNumber("h 1F 00 00 F1 E0 07 9F 1A FD 7B 41 A9", gg.TYPE_BYTE)
-	if gg.getResultsCount() == 0 then
-		gg.toast("Failed")
-		offsets.ptoemotes = 0
-		offsets.ptocloset = 0
-		return
-	end
-	gg.refineNumber("h E0", gg.TYPE_BYTE)
-	closet = gg.getResults(1)[1]
-	offsets.ptocloset = closet.address - bootloader
-	closet.name = "closet"
-	gg.addListItems({closet})
+	portal2 = gg.getResults(1)[1]
+	offsets.portal2_off = portal2.address - nentity.address
+	portal2.name = "portal2"
+	gg.addListItems({portal2})
 	gg.clearResults()
 	gg.setRanges(old_ranges)
 end
@@ -1049,14 +1032,10 @@ function show_offsets()
 	output = output.."player -> pos_x = "..string.format("%x", offsets.pos_off).."\n"
 	output = output.."ptoentity = "..string.format("%x", offsets.ptoentity).."\n"
 	output = output.."ptonentity = "..string.format("%x", offsets.ptonentity).."\n"
+	output = output.."nentity -> portal2_off = -"..string.format("%x", -offsets.portal2_off).."\n"
 	output = output.."nentity -> curmap = -"..string.format("%x", -offsets.curmap_off).."\n"
 	output = output.."nentity -> plants = "..string.format("%x", offsets.plants).."\n"
 	output = output.."nentity -> gamespeed_off = -"..string.format("%x", -offsets.gamespeed_off).."\n"
-	output = output.."chat = "..string.format("%x", offsets.chat).."\n"
-	output = output.."chat -> chat_dist = -"..string.format("%x", -offsets.chat_dist).."\n"
-	output = output.."ptoemotes = "..string.format("%x", offsets.ptoemotes).."\n"
-	output = output.."ptocloset = "..string.format("%x", offsets.ptocloset)
-
 	gg.alert(output, "ok")
 end
 
@@ -1070,10 +1049,6 @@ function find_all_offsets()
 	find_nentity()
 	gg.toast("Scanning for current map offset")
 	find_current_map()
-	gg.toast("Scanning for chat offset")
-	find_chat_offset()
-	gg.toast("Scanning for emotes and closet offset")
-	find_cometics_emotes()
 	gg.toast("Scanning for plants offset")
 	find_plants_offset()
 	gg.toast("Scanning for game speed offset")
@@ -1206,27 +1181,68 @@ function pmove(dis)
 	setposit(x + ax,y,z + az)
 end
 
-function switch_chat(bool)
-	local data = ""
-	data = tostring(bootloader + offsets.chat).."a 4043309695D | 704644064D;"
-	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist).."a 924841046D | 1384120553D;"
-	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist + 0x4).."a 1796473471D | 4181778410D;"
-	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist + 0x8).."a 1409286208D | 957113193D;"
-	data = data..tostring(bootloader + offsets.chat + offsets.chat_dist + 0xC).."a 907015158D | 958390601D"
+function change_map2(mp)
+	-- AHHAHHAHA I like this method moree
+	gg.toast(mp)
+	gg.setVisible(false)
+	xr1 = 0
+	xr2 = 0
+	xar = {}
+	xtr = nentity + offsets.portal2_off
 
-	gx.editor.switch(data, bool)
+	gx.editor.set_string({
+		{xtr + 0x39D0, mp, 24},
+		{xtr + 0x39F0, "Black", 28}
+	})
+	
+	xar = {
+		{address = xtr - 0x34, flags=gg.TYPE_QWORD,value=49},
+		{address = xtr - 0x30, flags=gg.TYPE_DWORD,value=0},
+
+		{address = xtr - 0x6C, flags=gg.TYPE_FLOAT,value=80000},
+		{address = xtr - 0x6C+0x4, flags=gg.TYPE_FLOAT,value=80000},
+		{address = xtr - 0x6C+0xC, flags=gg.TYPE_FLOAT,value=80000},
+		{address = xtr - 0x80, flags=gg.TYPE_FLOAT,value=80000}, -- 0x80
+		{address = xtr - 0x80+0x4, flags=gg.TYPE_FLOAT,value=80000},
+		{address = xtr - 0x80+0xC, flags=gg.TYPE_FLOAT,value=80000},
+		{address = xtr - 0x94, flags=gg.TYPE_FLOAT,value=80000}, -- 0x94
+		{address = xtr - 0x94+0x4, flags=gg.TYPE_FLOAT,value=80000},
+		{address = xtr - 0x94+0xC, flags=gg.TYPE_FLOAT,value=80000},
+		{address = xtr - 0xA8, flags=gg.TYPE_FLOAT,value=80000}, -- 0xA8
+		{address = xtr - 0xA8+0x4, flags=gg.TYPE_FLOAT,value=80000},
+		{address = xtr - 0xA8+0xC, flags=gg.TYPE_FLOAT,value=80000},
+
+		{address = xtr - 0x2C, flags=gg.TYPE_DWORD,value=28},
+		{address = xtr - 0x24, flags=gg.TYPE_QWORD,value=xtr + 0x39D0},
+		{address = xtr + 0x39AC, flags = gg.TYPE_DWORD,value = #mp},
+		{address = xtr - 0x1C, flags=gg.TYPE_DWORD,value=49},
+		{address = xtr - 0x18, flags=gg.TYPE_DWORD,value=0},
+		{address = xtr - 0x14, flags=gg.TYPE_DWORD,value=10},
+		{address = xtr - 0x10, flags=gg.TYPE_DWORD,value=0},
+		{address = xtr - 0xC, flags=gg.TYPE_QWORD,value=xtr+0x39F0},
+		{address = xtr, flags = gg.TYPE_DWORD,value = 666}
+	}
+
+	gg.setValues(xar)
+	
+	set_game_speed(10)
+	gg.sleep(1000)
+	set_game_speed(1)
 end
 
-function unlock_all(b)
-	if b then
-		cosmetics = on
-		setadd(bootloader + offsets.ptoemotes, gg.TYPE_DWORD, 1384120352, false)
-		setadd(bootloader + offsets.ptocloset, gg.TYPE_DWORD, 1384120352, false)
-	else
-		cosmetics = off
-		setadd(bootloader + offsets.ptoemotes, gg.TYPE_DWORD, -1186976888, false)
-		setadd(bootloader + offsets.ptocloset, gg.TYPE_DWORD, 446629856, false)
+function changemapmenu()
+	local mps = {}
+	for i, v in ipairs(maps) do
+		table.insert(mps, v[1])
 	end
+	
+	local mpchoice = gg.choice(mps, nil, "Choose map that you want to teleport to")
+	
+	if mpchoice == nil then
+		return
+	end
+
+	change_map2(maps[mpchoice][2])
 end
 
 function set_autoburn(b)
@@ -1587,11 +1603,10 @@ gx.add_menu({
 	menu = {
 		{"[⬆️] Wall Breach: {gx:settings.wbdistance}", {pmove, {"{gx:settings.wbdistance}"}}},
 		{"[🕯️] Semi-AutoCR", {semiautocr}},
+		{"[] Teleport", {changemapmenu}},
 		{"[🚩] Go to", {gotomenu}},
 		{"[🕘] Set Game Speed", {input_game_speed}},
 		{"{gxsign} Autoburn 🔥", {set_autoburn, {"{gxbool}"}}},
-		{"{gxsign} Unlock all Cosmetics and Emotes", {unlock_all, {"{gxbool}"}}},
-		{"{gxsign} Read Chat", {switch_chat}},
 		{"[⚙️] Settings", {gx.open_menu, {"settingsmenu"}}}
 	},
 	type = "choice"
@@ -1622,9 +1637,8 @@ gx.add_menu({
 		{"Find ptoentity & ptonentity", {find_nentity}},
 		{"Find current map offset", {find_current_map}},
 		{"Find plants offset", {find_plants_offset}},
+		{"Find portal offset", {find_portal_offset}},
 		{"Find game speed offset", {find_game_speed}},
-		{"Find chat offset", {find_chat_offset}},
-		{"Find ptoemotes and ptocloset offsets", {find_cometics_emotes}}
 	},
 	post_f = {show_offsets},
 	type = "back"
